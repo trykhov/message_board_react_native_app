@@ -53,9 +53,36 @@ export default class App extends React.Component {
 
   render() {
     return (
-      <View style={styles.container}>
-        <Text>Open up App.js to start working on your app!</Text>
-      </View>
+      <KeyboardAvoidingView behavior="padding" enabled style={styles.container}>
+        <View style={styles.header}>
+          <Text style={styles.headerText}>Message Board</Text>
+        </View>
+        <View style={styles.listContainer}>
+          <FlatList 
+            data={this.state.messageList} 
+            inverted 
+            keyExtractor={(item, index) => item.time.toString()}
+            renderItem={({item}) => (
+              <Card style={styles.listItem}>
+                <Text style={styles.messageText}>{item.text}</Text>
+                <Text style={styles.timeText}>{new Date(item.time).toLocaleDateString}</Text>
+              </Card>
+            )}  
+          />
+        </View>
+        <View style={styles.inputContainer}>
+          <Input 
+            onChangeText={text => this.setState({message: text})} 
+            value={this.state.message}
+            placeholder="Enter message"
+          />
+          <Button danger rounded icon
+            onPress={() => this.sendMessage(this.state.message)}
+          >
+            <Icon name="arrow-forward"></Icon>
+          </Button>
+        </View>
+      </KeyboardAvoidingView>
     )
   }
 }
